@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "trip_categories",
+  "info": {
+    "singularName": "trip-categorie",
+    "pluralName": "trip-categories",
+    "displayName": "TripCategories",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "trips": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::trip.trip",
+      "inversedBy": "trip_categories"
+    }
+  }
+}
