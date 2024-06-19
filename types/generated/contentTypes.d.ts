@@ -794,14 +794,21 @@ export interface ApiAgencyAgency extends Schema.CollectionType {
     singularName: 'agency';
     pluralName: 'agencies';
     displayName: 'Agencies';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    AgencyName: Attribute.String;
+    AgencyName: Attribute.String & Attribute.Required;
     Email: Attribute.Email;
     Documents: Attribute.Media<'images' | 'files' | 'videos' | 'audios', true>;
+    Mobile: Attribute.BigInteger & Attribute.Required;
+    trips: Attribute.Relation<
+      'api::agency.agency',
+      'oneToMany',
+      'api::trip.trip'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -826,6 +833,7 @@ export interface ApiTripTrip extends Schema.CollectionType {
     singularName: 'trip';
     pluralName: 'trips';
     displayName: 'Trips';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -834,53 +842,19 @@ export interface ApiTripTrip extends Schema.CollectionType {
     title: Attribute.String & Attribute.Required & Attribute.Unique;
     description: Attribute.Blocks;
     tripimage: Attribute.Media<'images' | 'files' | 'videos' | 'audios', true>;
-    trip_categories: Attribute.Relation<
+    agency: Attribute.Relation<
       'api::trip.trip',
-      'manyToMany',
-      'api::trip-categorie.trip-categorie'
+      'manyToOne',
+      'api::agency.agency'
     >;
+    Category: Attribute.Enumeration<['bike', 'backpack']> & Attribute.Required;
+    RegisteredUsers: Attribute.Component<'regusers.registeredusers', true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::trip.trip', 'oneToOne', 'admin::user'> &
       Attribute.Private;
     updatedBy: Attribute.Relation<'api::trip.trip', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
-export interface ApiTripCategorieTripCategorie extends Schema.CollectionType {
-  collectionName: 'trip_categories';
-  info: {
-    singularName: 'trip-categorie';
-    pluralName: 'trip-categories';
-    displayName: 'TripCategories';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    title: Attribute.String & Attribute.Required & Attribute.Unique;
-    trips: Attribute.Relation<
-      'api::trip-categorie.trip-categorie',
-      'manyToMany',
-      'api::trip.trip'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::trip-categorie.trip-categorie',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::trip-categorie.trip-categorie',
-      'oneToOne',
-      'admin::user'
-    > &
       Attribute.Private;
   };
 }
@@ -905,7 +879,6 @@ declare module '@strapi/types' {
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::agency.agency': ApiAgencyAgency;
       'api::trip.trip': ApiTripTrip;
-      'api::trip-categorie.trip-categorie': ApiTripCategorieTripCategorie;
     }
   }
 }

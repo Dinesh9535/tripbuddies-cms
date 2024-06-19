@@ -4,7 +4,8 @@
   "info": {
     "singularName": "trip",
     "pluralName": "trips",
-    "displayName": "Trips"
+    "displayName": "Trips",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -20,20 +21,35 @@
       "type": "blocks"
     },
     "tripimage": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": true
+      ]
     },
-    "trip_categories": {
+    "agency": {
       "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::trip-categorie.trip-categorie",
-      "mappedBy": "trips"
+      "relation": "manyToOne",
+      "target": "api::agency.agency",
+      "inversedBy": "trips"
+    },
+    "Category": {
+      "type": "enumeration",
+      "enum": [
+        "bike",
+        "backpack"
+      ],
+      "required": true
+    },
+    "RegisteredUsers": {
+      "displayName": "registeredusers",
+      "type": "component",
+      "repeatable": true,
+      "component": "regusers.registeredusers"
     }
   }
 }
